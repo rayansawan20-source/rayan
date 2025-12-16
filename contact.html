@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRUD App with Message</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style>
+body{
+background: linear-gradient(135deg,#e2e4b3 0%,#cab273 100%);
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+margin:0;
+font-family:Segoe UI;
+}
+
+.crud-container{
+background:#fff;
+padding:30px 25px;
+border-radius:15px;
+box-shadow:0 10px 25px rgba(0,0,0,.15);
+width:100%;
+max-width:420px;
+}
+
+h2{text-align:center;margin-bottom:25px}
+
+input,textarea{
+width:100%;
+padding:14px;
+margin-bottom:15px;
+border-radius:8px;
+border:1px solid #ddd;
+font-size:15px;
+box-sizing:border-box;
+}
+
+textarea{
+resize:none;
+height:90px;
+}
+input:focus,
+textarea:focus{
+    border-color: #cab273;
+    background-color: #fffdf6;
+    box-shadow: 0 0 0 3px rgba(202,178,115,0.25);
+    outline: none;
+}
+
+
+#submitBtn{
+width:100%;
+padding:15px;
+border:none;
+border-radius:8px;
+font-size:17px;
+font-weight:bold;
+cursor:pointer;
+background:#cab273;
+color:#fff;
+margin-bottom:20px;
+box-shadow: 0 8px 18px rgba(202,178,115,0.45);
+}
+#submitBtn:hover{
+    box-shadow: 0 10px 22px rgba(202,178,115,0.6);
+}
+
+#submitBtn:active{
+    transform: scale(0.97);
+    box-shadow: 0 5px 12px rgba(202,178,115,0.35);
+}
+
+
+.search-container{position:relative;margin-bottom:20px}
+.search-container input{padding-left:45px}
+.search-container i{
+position:absolute;
+left:15px;
+top:50%;
+transform:translateY(-50%);
+color:#888;
+}
+
+#userList{list-style:none;padding:0}
+#userList li{
+border-bottom:1px solid #eee;
+padding:15px 0;
+display:flex;
+justify-content:space-between;
+gap:10px;
+}
+
+.actions button{
+border:none;
+padding:6px 10px;
+border-radius:6px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.edit{background:#ffc107}
+.delete{background:#dc3545;color:#fff}
+/* ================================= */
+/* 📱 الهاتف */
+/* ================================= */
+@media screen and (max-width: 600px) {
+
+    body{
+        padding: 15px;
+        align-items: flex-start;
+    }
+
+    .crud-container{
+        width: 100%;
+        max-width: 100%;
+        padding: 22px 18px;
+        border-radius: 12px;
+    }
+
+    h2{
+        font-size: 22px;
+    }
+
+    input,
+    textarea{
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    textarea{
+        height: 80px;
+    }
+
+    #submitBtn{
+        font-size: 16px;
+        padding: 13px;
+    }
+
+    #userList li{
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .actions{
+        width: 100%;
+        display: flex;
+        gap: 10px;
+    }
+
+    .actions button{
+        flex: 1;
+        padding: 10px;
+        font-size: 13px;
+    }
+}
+
+/* ================================= */
+/* 📲 التابلت */
+/* ================================= */
+@media screen and (min-width: 601px) and (max-width: 1024px) {
+
+    body{
+        padding: 20px;
+    }
+
+    .crud-container{
+        max-width: 520px;
+        padding: 25px 22px;
+    }
+
+    h2{
+        font-size: 24px;
+    }
+
+    input,
+    textarea{
+        font-size: 15px;
+    }
+
+    textarea{
+        height: 90px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+<div class="crud-container">
+<h2><i class="fas fa-star"></i> CONTACT US</h2>
+
+<form id="crudForm">
+<input type="text" id="name" placeholder="Enter name" required>
+<input type="email" id="email" placeholder="Enter email" required>
+
+<!-- ✅ الرسالة -->
+<textarea id="message" placeholder="Write your message..." required></textarea>
+
+<button id="submitBtn">Send</button>
+</form>
+
+<div class="search-container">
+<i class="fas fa-search"></i>
+<input type="text" id="search" placeholder="Search...">
+</div>
+
+<ul id="userList"></ul>
+</div>
+<!---
+<script>
+let users = JSON.parse(localStorage.getItem("users")) || [];
+let editIndex = null;
+
+const form = document.getElementById("crudForm");
+const nameInput = document.getElementById("name");
+const emailInput = document.getElementById("email");
+const messageInput = document.getElementById("message");
+const searchInput = document.getElementById("search");
+const userList = document.getElementById("userList");
+
+renderUsers();
+
+form.addEventListener("submit", e => {
+e.preventDefault();
+
+const user = {
+name: nameInput.value.trim(),
+email: emailInput.value.trim(),
+message: messageInput.value.trim()
+};
+
+if(editIndex === null){
+users.push(user);
+}else{
+users[editIndex] = user;
+editIndex = null;
+}
+
+form.reset();
+save();
+renderUsers();
+});
+
+searchInput.addEventListener("input", renderUsers);
+
+function renderUsers(){
+userList.innerHTML="";
+const filter = searchInput.value.toLowerCase();
+
+users.forEach((u,i)=>{
+if(!u.name.toLowerCase().includes(filter) &&
+   !u.email.toLowerCase().includes(filter) &&
+   !u.message.toLowerCase().includes(filter)) return;
+
+const li=document.createElement("li");
+
+li.innerHTML=`
+<div>
+<strong>${u.name}</strong><br>
+${u.email}<br>
+<small>${u.message}</small>
+</div>
+<div class="actions">
+<button class="edit" onclick="editUser(${i})">Edit</button>
+<button class="delete" onclick="deleteUser(${i})">Delete</button>
+</div>
+`;
+
+userList.appendChild(li);
+});
+}
+
+function editUser(i){
+nameInput.value=users[i].name;
+emailInput.value=users[i].email;
+messageInput.value=users[i].message;
+editIndex=i;
+}
+
+function deleteUser(i){
+users.splice(i,1);
+save();
+renderUsers();
+}
+
+function save(){
+localStorage.setItem("users",JSON.stringify(users));
+}
+</script>
+-->
+ <script src="script.js"></script>
+</body>
+</html>
+
