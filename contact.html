@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CRUD App with Message</title>
+<title> Message</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <style>
@@ -103,9 +103,7 @@ font-weight:bold;
 
 .edit{background:#ffc107}
 .delete{background:#dc3545;color:#fff}
-/* ================================= */
-/* 📱 الهاتف */
-/* ================================= */
+
 @media screen and (max-width: 600px) {
 
     body{
@@ -158,9 +156,6 @@ font-weight:bold;
     }
 }
 
-/* ================================= */
-/* 📲 التابلت */
-/* ================================= */
 @media screen and (min-width: 601px) and (max-width: 1024px) {
 
     body{
@@ -197,7 +192,7 @@ font-weight:bold;
 <input type="text" id="name" placeholder="Enter name" required>
 <input type="email" id="email" placeholder="Enter email" required>
 
-<!-- ✅ الرسالة -->
+
 <textarea id="message" placeholder="Write your message..." required></textarea>
 
 <button id="submitBtn">Send</button>
@@ -210,88 +205,8 @@ font-weight:bold;
 
 <ul id="userList"></ul>
 </div>
-<!---
-<script>
-let users = JSON.parse(localStorage.getItem("users")) || [];
-let editIndex = null;
 
-const form = document.getElementById("crudForm");
-const nameInput = document.getElementById("name");
-const emailInput = document.getElementById("email");
-const messageInput = document.getElementById("message");
-const searchInput = document.getElementById("search");
-const userList = document.getElementById("userList");
 
-renderUsers();
-
-form.addEventListener("submit", e => {
-e.preventDefault();
-
-const user = {
-name: nameInput.value.trim(),
-email: emailInput.value.trim(),
-message: messageInput.value.trim()
-};
-
-if(editIndex === null){
-users.push(user);
-}else{
-users[editIndex] = user;
-editIndex = null;
-}
-
-form.reset();
-save();
-renderUsers();
-});
-
-searchInput.addEventListener("input", renderUsers);
-
-function renderUsers(){
-userList.innerHTML="";
-const filter = searchInput.value.toLowerCase();
-
-users.forEach((u,i)=>{
-if(!u.name.toLowerCase().includes(filter) &&
-   !u.email.toLowerCase().includes(filter) &&
-   !u.message.toLowerCase().includes(filter)) return;
-
-const li=document.createElement("li");
-
-li.innerHTML=`
-<div>
-<strong>${u.name}</strong><br>
-${u.email}<br>
-<small>${u.message}</small>
-</div>
-<div class="actions">
-<button class="edit" onclick="editUser(${i})">Edit</button>
-<button class="delete" onclick="deleteUser(${i})">Delete</button>
-</div>
-`;
-
-userList.appendChild(li);
-});
-}
-
-function editUser(i){
-nameInput.value=users[i].name;
-emailInput.value=users[i].email;
-messageInput.value=users[i].message;
-editIndex=i;
-}
-
-function deleteUser(i){
-users.splice(i,1);
-save();
-renderUsers();
-}
-
-function save(){
-localStorage.setItem("users",JSON.stringify(users));
-}
-</script>
--->
  <script src="script.js"></script>
 </body>
 </html>

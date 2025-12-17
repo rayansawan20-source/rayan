@@ -82,55 +82,153 @@ if(aboutImages.length){
 
 
 
-const sliderTrack = document.getElementById("sliderTrack");
-const sliderContainer = document.getElementById("sliderContainer");
-const cards = document.querySelectorAll(".card");
-const dotsContainer = document.getElementById("dotsContainer");
 
-let currentIndex = 0;
+document.addEventListener("DOMContentLoaded", function () {
 
+    const section = document.querySelector("#testimonials");
+    if (!section) return;
 
-function getCardsPerPage() {
-    if(window.innerWidth <= 576) return 1;
-    if(window.innerWidth <= 992) return 2;
-    return 3;
-}
+    let index = 0;
 
-function createDots() {
-    dotsContainer.innerHTML = '';
-    const pages = Math.ceil(cards.length / getCardsPerPage());
-    for(let i=0; i<pages; i++){
-        const dot = document.createElement('span');
-        dot.classList.add('dot');
-        if(i===0) dot.classList.add('active');
-        dot.addEventListener('click', ()=> moveSlider(i));
-        dotsContainer.appendChild(dot);
+    const track = section.querySelector("#sliderTrack");
+    const cards = section.querySelectorAll(".card");
+    const dotsContainer = section.querySelector("#dotsContainer");
+
+    function cardsPerView() {
+        if (window.innerWidth <= 576) return 1;
+        if (window.innerWidth <= 992) return 2;
+        return 3;
     }
-}
-createDots();
 
+    function updateSlider() {
+        if (!cards.length) return;
+        const cardWidth = cards[0].offsetWidth;
+        track.style.transform = `translateX(-${index * cardWidth}px)`;
+    }
 
-function moveSlider(index){
-    const cardsPerPage = getCardsPerPage();
-    const pageWidth = sliderContainer.clientWidth;
-    sliderTrack.style.transform = `translateX(-${pageWidth * index}px)`;
-    currentIndex = index;
+    function createDots() {
+        dotsContainer.innerHTML = "";
 
-    
-    const dots = document.querySelectorAll('.dot');
-    dots.forEach(d=> d.classList.remove('active'));
-    dots[currentIndex].classList.add('active');
-}
+        const totalDots = cards.length - cardsPerView() + 1;
 
+        for (let i = 0; i < totalDots; i++) {
+            const dot = document.createElement("span");
+            if (i === index) dot.classList.add("active");
 
-setInterval(()=>{
-    const pages = Math.ceil(cards.length / getCardsPerPage());
-    currentIndex = (currentIndex + 1) % pages;
-    moveSlider(currentIndex);
-}, 4000);
+            dot.addEventListener("click", () => {
+                index = i;
+                updateSlider();
+                setActiveDot();
+            });
 
+            dotsContainer.appendChild(dot);
+        }
+    }
 
-window.addEventListener('resize', ()=>{
+    function setActiveDot() {
+        const dots = dotsContainer.querySelectorAll("span");
+        dots.forEach(dot => dot.classList.remove("active"));
+        if (dots[index]) dots[index].classList.add("active");
+    }
+
+    function autoSlide() {
+        const maxIndex = cards.length - cardsPerView();
+        index = (index >= maxIndex) ? 0 : index + 1;
+        updateSlider();
+        setActiveDot();
+    }
+
     createDots();
-    moveSlider(0);
+    updateSlider();
+
+    setInterval(autoSlide, 4000);
+
+    window.addEventListener("resize", () => {
+        index = 0;
+        updateSlider();
+        createDots();
+    });
+
 });
+
+
+let users = JSON.parse(localStorage.getItem("users")) || [];
+let editIndex = null;
+
+const form = document.getElementById("crudForm");
+const nameInput = document.getElementById("name");
+const emailInput = document.getElementById("email");
+const messageInput = document.getElementById("message");
+const searchInput = document.getElementById("search");
+const userList = document.getElementById("userList");
+
+renderUsers();
+
+form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const user = {
+        name: nameInput.value.trim(),
+        email: emailInput.value.trim(),
+        message: messageInput.value.trim()
+    };
+
+    if (editIndex === null) {
+        users.push(user);
+    } else {
+        users[editIndex] = user;
+        editIndex = null;
+    }
+
+    form.reset();
+    save();
+    renderUsers();
+});
+
+searchInput.addEventListener("input", renderUsers);
+
+function renderUsers() {
+    userList.innerHTML = "";
+    const filter = searchInput.value.toLowerCase();
+
+    users.forEach((u, i) => {
+        if (
+            !u.name.toLowerCase().includes(filter) &&
+            !u.email.toLowerCase().includes(filter) &&
+            !u.message.toLowerCase().includes(filter)
+        ) return;
+
+        const li = document.createElement("li");
+
+        li.innerHTML = `
+            <div>
+                <strong>${u.name}</strong><br>
+                ${u.email}<br>
+                <small>${u.message}</small>
+            </div>
+            <div class="actions">
+                <button class="edit" onclick="editUser(${i})">Edit</button>
+                <button class="delete" onclick="deleteUser(${i})">Delete</button>
+            </div>
+        `;
+
+        userList.appendChild(li);
+    });
+}
+
+function editUser(i) {
+    nameInput.value = users[i].name;
+    emailInput.value = users[i].email;
+    messageInput.value = users[i].message;
+    editIndex = i;
+}
+
+function deleteUser(i) {
+    users.splice(i, 1);
+    save();
+    renderUsers();
+}
+
+function save() {
+    localStorage.setItem("users", JSON.stringify(users));
+}

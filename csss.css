@@ -1245,33 +1245,125 @@ transition: all ease 0.3s;
 
 
 
-.testimonials-section { max-width: 1200px; margin: 50px auto; padding: 0 20px; text-align: center; }
-.testimonials-section h2 { font-size: 2rem; color: #202020; margin-bottom: 5px; }
-.testimonials-section .subtitle { font-size: 1rem; color: #555; margin-bottom: 30px; }
+.testimonials-section {
+    padding: 80px 5%;
+    text-align: center;
+    }
 
-.slider-container { overflow: hidden; position: relative; }
-.slider-track { display: flex; gap: 20px; transition: transform 0.5s ease-in-out; }
+.testimonials-section h2 {
+    font-size: 2rem;
+    color: #000;
+    font-weight: 600;
+}
 
-.card { flex: 0 0 calc(33.333% - 13.33px); background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s; }
-.card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+.subtitle {
+    color: #777;
+    margin-bottom: 40px;
+}
 
-.user { display: flex; align-items: center; margin-bottom: 15px; }
-.user img { width: 60px; height: 60px; border-radius: 50%; margin-right: 15px; object-fit: cover; }
-.user h3 { margin: 0; font-size: 1rem; color: #333; }
-.user span { font-size: 0.8rem; color: #777; }
+.slider-container {
+    overflow: hidden;
+    max-width: 1200px;
+    margin: auto;
+}
 
-.stars { margin-bottom: 15px; color: #f3c623; }
-.stars i { margin-right: 3px; }
-
-.card p { font-size: 0.9rem; color: #555; line-height: 1.4; }
-
-.dots { margin-top: 20px; }
-.dot { display: inline-block; width: 12px; height: 12px; margin: 0 5px; background: #ddd; border-radius: 50%; cursor: pointer; transition: background 0.3s; }
-.dot.active { background: var(--main-color); }
+.slider-track {
+    display: flex;
+    transition: transform 0.6s ease-in-out;
+}
 
 
-@media(max-width: 992px) { .card { flex: 0 0 calc(50% - 10px); } }
-@media(max-width: 576px) { .card { flex: 0 0 100%; } }
+.card {
+    flex: 0 0 33.333%;
+    padding: 25px;
+    box-sizing: border-box;
+}
+
+.card > div {
+   
+    border-radius: 15px;
+    padding: 25px;
+    height: 100%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    transition: transform 0.4s ease;
+}
+
+.card > div:hover {
+    transform: translateY(-8px);
+}
+
+
+.user {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.user img {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    margin-right: 15px;
+    object-fit: cover;
+    border: 5px solid var(--main-color);
+}
+
+.user h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: #000;
+}
+
+.user span {
+    font-size: 0.8rem;
+    color: #777;
+}
+
+.stars {
+    color:yellow;
+    margin: 10px 0;
+}
+
+
+.card p {
+    font-size: 0.95rem;
+    color: #444;
+    line-height: 1.6;
+}
+
+
+.dots {
+    margin-top: 25px;
+}
+
+.dots span {
+    width: 10px;
+    height: 10px;
+    background: #ccc;
+    display: inline-block;
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.dots span.active {
+    background: var(--main-color);
+}
+
+
+@media (max-width: 992px) {
+    .card {
+        flex: 0 0 50%;
+    }
+}
+
+
+@media (max-width: 480px) {
+    .card {
+        flex: 0 0 100%;
+    }
+}
+
 
 
 .footer {
