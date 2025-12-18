@@ -828,9 +828,6 @@ transition: all ease 0.3s;
     color: #555555;        
     margin-top: 8px;
 }
-#categor{
-    padding-top: 15em;
-}
 .product-grid-four {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -948,6 +945,7 @@ transition: all ease 0.3s;
     .four-text strong { font-size: 18px; }
 }
 
+   
 .product-grid-4x3 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -1116,9 +1114,7 @@ transition: all ease 0.3s;
         padding: 3px 6px;
     }
 }
-#about{
-    padding-top: 20em;
-}
+
 
 .section {
     margin-top: 10%;
@@ -1246,9 +1242,6 @@ transition: all ease 0.3s;
     }
 }
 
-#testimonials{
-    padding-top: 10em;
-}
 
 .testimonials-section {
     padding: 80px 5%;
