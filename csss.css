@@ -945,7 +945,9 @@ transition: all ease 0.3s;
     .four-text strong { font-size: 18px; }
 }
 
-   
+   #new_products{
+    padding-top: 5em;
+   }
 .product-grid-4x3 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -1115,7 +1117,9 @@ transition: all ease 0.3s;
     }
 }
 
-
+#about{
+    padding-top: 9em;
+}
 .section {
     margin-top: 10%;
     margin-bottom: 10%;
